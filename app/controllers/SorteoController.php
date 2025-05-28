@@ -38,6 +38,8 @@ class SorteoController extends Controller
         $this->view('sorteo');
     }
 
+
+
     public function elegirGanador()
     {
         header('Content-Type: application/json');
@@ -56,13 +58,14 @@ class SorteoController extends Controller
             echo json_encode(["error" => "Error interno del servidor"]);
         }
     }
-    public function obtenerParticipantes() {
+    public function obtenerParticipantes()
+    {
         header('Content-Type: application/json');
-    
+
         try {
             $modelo = $this->model('SorteoModel');
             $participantes = $modelo->listarParticipantes(1); // sorteo_id fijo
-    
+
             if (is_array($participantes)) {
                 echo json_encode($participantes);
             } else {
@@ -72,12 +75,7 @@ class SorteoController extends Controller
             http_response_code(500);
             echo json_encode(["error" => "Error en el servidor"]);
         }
-    
+
         exit; // IMPORTANTE: asegura que no se envíe nada más
     }
-    
-
-
-
 }
-
