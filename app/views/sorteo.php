@@ -106,6 +106,33 @@
             transition: all 0.3s ease;
         }
 
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        #listaParticipantes li {
+            background-color: #00ffcc;
+            color: #000;
+            padding: 0.6rem 1.2rem;
+            border-radius: 999px;
+            font-size: clamp(14px, 3vw, 20px);
+            font-weight: bold;
+            transition: all 0.3s ease;
+            animation: bounceIn 0.5s ease;
+        }
+
 
         @keyframes pulse {
             0% {
@@ -187,7 +214,7 @@
                     clearInterval(interval);
                     contador.textContent = "🎊";
 
-                    fetch("<?php echo URLROOT; ?>/SorteoController/elegirGanador")
+                    fetch("http://localhost:8080/sorteos/public/SorteoController/elegirGanador")
                         .then(res => res.json())
                         .then(data => {
                             if (data.nombre) {
@@ -211,13 +238,11 @@
         }
 
         function cargarParticipantes() {
-            fetch("<?php echo URLROOT; ?>/SorteoController/obtenerParticipantes")
-                .then(res => {
-                    if (!res.ok) throw new Error("Respuesta no válida");
-                    return res.json();
-                })
+            fetch("http://localhost:8080/sorteos/public/SorteoController/obtenerParticipantes")
+                .then(res => res.json())
                 .then(data => {
-                    console.log("👀 PARTICIPANTES:", data); // Debug aquí
+                    console.log("Participantes cargados:", data);
+
                     const lista = document.getElementById("listaParticipantes");
                     lista.innerHTML = "";
                     data.forEach(p => {
@@ -226,15 +251,13 @@
                         lista.appendChild(li);
                     });
                 })
-                .catch(err => {
-                    console.error("❌ Error al obtener participantes:", err);
+                .catch(error => {
+                    console.error("❌ Error al obtener participantes:", error);
                 });
         }
 
-
-        setInterval(cargarParticipantes, 3000);
-
-
+        cargarParticipantes(); // Ejecuta al cargar la página
+        setInterval(cargarParticipantes, 1000); // Ejecuta cada 1 segundo
     </script>
 </body>
 
